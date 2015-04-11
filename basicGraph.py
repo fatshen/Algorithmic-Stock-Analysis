@@ -7,9 +7,17 @@ from matplotlib.finance import candlestick
 import matplotlib
 matplotlib.rcParams.update({'font.size': 9})
 
-eachStock = 'TSLA','AAPL'
+eachStock = 'EBAY','AAPL'
 
-def graphData(stock): 
+
+def movingAverage(values, window):
+	weights = np.repeat(1.0, window)/window
+	smas = np.convolve(values, weights, 'valid')
+	return smas
+
+
+
+def graphData(stock,MA1,MA2): 
 	try: 
 		stockFile = stock+'.txt'
 		
@@ -21,12 +29,26 @@ def graphData(stock):
 		while x < y: 
 			appendLine = date[x],openp[x],closep[x],highp[x],lowp[x],volume[x]
 			candle_Ar.append(appendLine)
-			x += 1 
+			x += 1
+
+
+		Av1 = movingAverage(closep, MA1)
+		Av2 = movingAverage(closep, MA2)
+		
+		SP = len(date[MA2-1:])
+
+		label1 = str(MA1) + 'SMA'
+		label2 = str(MA2) + 'SMA' 
+
+
 		
 		fig = plt.figure(facecolor='#07000d')
 		axis_1 = plt.subplot2grid((5,4),(0,0), rowspan=4, colspan=4, axisbg='#07000d')
-		candlestick(axis_1,candle_Ar,width=.5,colorup='#9eff15',colordown='#ff1717')
-		
+		candlestick(axis_1,candle_Ar[-SP:],width=.6,colorup='#9eff15',colordown='#ff1717')
+		axis_1.plot(date[-SP:],Av1[-SP:],"#5998ff",label=label1,linewidth=1.5)
+		axis_1.plot(date[-SP:],Av2[-SP:], "#e1edf9", label=label2, linewidth=1.5)
+
+
 		axis_1.yaxis.label.set_color('w')
 		axis_1.spines['bottom'].set_color("#5998ff")
 		axis_1.spines['top'].set_color("#5998ff")
@@ -34,8 +56,9 @@ def graphData(stock):
 		axis_1.spines['right'].set_color("#5998ff")
 		axis_1.tick_params(axis='y', colors='w')
 		plt.ylabel('Stock Price')
-		
-		volumeMin = volume.min()
+		plt.legend(loc=3,prop={'size':6}, fancybox=True)
+
+		volumeMin = 0
 		
 		axis_1.grid(True, color='w')
 
@@ -76,5 +99,5 @@ def graphData(stock):
 		print 'Failed_main', str(e)
 
 for stock in eachStock:
-	graphData(stock)
+	graphData(stock,12,26)
 	

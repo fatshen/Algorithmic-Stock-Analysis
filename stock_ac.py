@@ -5,7 +5,7 @@ stocksToPull = 'AAPL', 'GOOG', 'MSFT', 'CMG', 'TSLA', 'EBAY', 'AMZN'
 def pullData(stock): 
 	try: 
 		fileLine = stock+'.txt'
-		urlToVisit = 'http://chartapi.finance.yahoo.com/instrument/1.0/' +stock+ '/chartdata;type=quote;range=1y/csv' 
+		urlToVisit = 'http://chartapi.finance.yahoo.com/instrument/1.0/' +stock+ '/chartdata;type=quote;range=3y/csv' 
 		sourceCode = urllib2.urlopen(urlToVisit).read()
 		splitSource = sourceCode.split('\n') 
 		
