@@ -246,7 +246,7 @@ def graphData(stock,MA1,MA2):
 		
 		plt.subplots_adjust(left=.09,bottom=.14,right=.94,top=.95,wspace=.20,hspace=0)
 		plt.show()
-		fig.savefig('example.png', facecolor=fig.get_facecolor())
+		fig.savefig('example2.png', facecolor=fig.get_facecolor())
 
 	except Exception, e: 
 		print 'Failed_main', str(e)
